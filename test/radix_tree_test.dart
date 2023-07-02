@@ -6,31 +6,25 @@ import 'package:test/test.dart';
 void main() {
   group('Test RadixTree', () {
     test('Largest Prefix', () {
-      expect(
-          RadixTreeUtils.largestPrefixLength('abcdefg', 'abcdexyz'), equals(5));
-      expect(
-          RadixTreeUtils.largestPrefixLength('abcdefg', 'abcxyz'), equals(3));
-      expect(RadixTreeUtils.largestPrefixLength('abcdefg', 'abctuvxyz'),
-          equals(3));
-      expect(RadixTreeUtils.largestPrefixLength('abcdefg', ''), equals(0));
-      expect(RadixTreeUtils.largestPrefixLength('', 'abcdexyz'), equals(0));
-      expect(RadixTreeUtils.largestPrefixLength('xyz', 'abcxyz'), equals(0));
+      expect(largest_prefix_length('abcdefg'.split(""), 'abcdexyz'.split("")), equals(5));
+      expect(largest_prefix_length('abcdefg'.split(""), 'abcxyz'.split("")), equals(3));
+      expect(largest_prefix_length('abcdefg'.split(""), 'abctuvxyz'.split("")), equals(3));
+      expect(largest_prefix_length('abcdefg'.split(""), ''.split("")), equals(0));
+      expect(largest_prefix_length(''.split(""), 'abcdexyz'.split("")), equals(0));
+      expect(largest_prefix_length('xyz'.split(""), 'abcxyz'.split("")), equals(0));
     });
-
     test('Empty Tree', () {
-      expect(RadixTree<int>(), isEmpty);
+      expect(make_radix_tree<int>(), isEmpty);
     });
-
     test('Single Insertion', () {
-      var tree = RadixTree<int>();
+      final tree = make_radix_tree<int>();
       tree['test'] = 1;
       expect(tree, isNotEmpty);
       expect(tree, hasLength(equals(1)));
       expect(tree, contains('test'));
     });
-
     test('Multiple Insertions', () {
-      var tree = RadixTree<int>();
+      final tree = make_radix_tree<int>();
       tree['test'] = 1;
       tree['tent'] = 2;
       tree['tank'] = 3;
@@ -41,9 +35,8 @@ void main() {
       expect(tree, containsPair('tank', equals(3)));
       expect(tree, containsPair('rest', equals(4)));
     });
-
     test('Multiple Insertions Of The Same Key', () {
-      var tree = RadixTree<int>();
+      final tree = make_radix_tree<int>();
       tree['test'] = 1;
       tree['tent'] = 2;
       tree['tank'] = 3;
@@ -53,7 +46,6 @@ void main() {
       expect(tree, containsPair('tent', equals(2)));
       expect(tree, containsPair('tank', equals(3)));
       expect(tree, containsPair('rest', equals(4)));
-
       tree['test'] = 9;
       expect(tree, hasLength(equals(4)));
       expect(tree, containsPair('test', 9));
@@ -61,9 +53,8 @@ void main() {
       expect(tree, containsPair('tank', 3));
       expect(tree, containsPair('rest', 4));
     });
-
     test('Prefix Fetch', () {
-      var tree = RadixTree<int>();
+      final tree = make_radix_tree<int>();
       tree['test'] = 1;
       tree['tent'] = 2;
       tree['rest'] = 3;
@@ -74,9 +65,8 @@ void main() {
       expect(tree.getValuesWithPrefix('te'), containsAll(const <int>[1, 2]));
       expect(tree.getValuesWithPrefix('asd'), containsAll(const <int>[]));
     });
-
     test('operator[] Fetch', () {
-      var tree = RadixTree<int>();
+      final tree = make_radix_tree<int>();
       tree['tes'] = 0;
       tree['test'] = 1;
       tree['tent'] = 2;
@@ -96,9 +86,8 @@ void main() {
       expect(tree['tanke'], isNull);
       expect(tree['asd'], isNull);
     });
-
     test('Contains Key', () {
-      var tree = RadixTree<int>();
+      final tree = make_radix_tree<int>();
       tree['tes'] = 0;
       tree['test'] = 1;
       tree['tent'] = 2;
@@ -119,9 +108,8 @@ void main() {
       expect(tree, isNot(contains('tanke')));
       expect(tree, isNot(contains('asd')));
     });
-
     test('Contains Value', () {
-      var tree = RadixTree<int>();
+      final tree = make_radix_tree<int>();
       tree[''] = 0;
       tree['test'] = 1;
       tree['tent'] = 2;
@@ -137,63 +125,54 @@ void main() {
       expect(tree, isNot(containsValue(5)));
       expect(tree, isNot(containsValue('test')));
     });
-
     test('Spook', () {
-      var tree = RadixTree<int>();
+      final tree = make_radix_tree<int>();
       tree['pook'] = 1;
       tree['spook'] = 2;
       expect(tree, hasLength(equals(2)));
       expect(tree.keys, containsAll(<String>['pook', 'spook']));
     });
-
     test('Removal', () {
-      var tree = RadixTree<int>();
+      final tree = make_radix_tree<int>();
       tree['test'] = 1;
       tree['tent'] = 2;
       tree['tank'] = 3;
       expect(tree, hasLength(equals(3)));
       expect(tree, contains('tent'));
-
       tree.remove('key');
       expect(tree, hasLength(equals(3)));
       expect(tree, contains('tent'));
-
       tree.remove('tent');
       expect(tree, hasLength(equals(2)));
       expect(tree, containsPair('test', equals(1)));
       expect(tree, isNot(contains('tent')));
       expect(tree, containsPair('tank', equals(3)));
     });
-
     test('Many Insertions', () {
-      var tree = RadixTree<BigInt>();
-
+      final tree = make_radix_tree<BigInt>();
       const hex = '0123456789ABCDEF';
-      var random = Random();
-      var bigInts = <BigInt>{};
+      final random = Random();
+      final big_ints = <BigInt>{};
       var i = 100 + random.nextInt(400);
-
       while (i > 0) {
-        var bigInt = BigInt.parse(
-            List<String>.generate(20, (index) => hex[random.nextInt(0x10)])
-                .join(),
-            radix: 0x10);
-
-        if (!bigInts.contains(bigInt)) {
-          bigInts.add(bigInt);
-          tree[bigInt.toRadixString(0x10)] = bigInt;
+        final big_int = BigInt.parse(
+          List<String>.generate(
+            20,
+            (final index) => hex[random.nextInt(0x10)],
+          ).join(),
+          radix: 0x10,
+        );
+        if (!big_ints.contains(big_int)) {
+          big_ints.add(big_int);
+          tree[big_int.toRadixString(0x10)] = big_int;
         }
-
         i -= 1;
       }
-
-      expect(tree, hasLength(equals(bigInts.length)));
-
-      for (var bigInt in bigInts) {
-        expect(tree, containsPair(bigInt.toRadixString(0x10), equals(bigInt)));
+      expect(tree, hasLength(equals(big_ints.length)));
+      for (final big_int in big_ints) {
+        expect(tree, containsPair(big_int.toRadixString(0x10), equals(big_int)));
       }
-
-      expect(tree.values, containsAll(bigInts));
+      expect(tree.values, containsAll(big_ints));
     });
   });
 }

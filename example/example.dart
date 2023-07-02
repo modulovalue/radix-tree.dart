@@ -2,8 +2,8 @@
 
 import 'package:radix_tree/radix_tree.dart';
 
-void main(List<String> args) {
-  var tree = RadixTree<int>();
+void main() {
+  final tree = make_radix_tree<int>();
   tree['paku'] = 1;
   tree['piku'] = 2;
   tree['pako'] = 3;
